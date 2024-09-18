@@ -1,3 +1,6 @@
 [submodule "nnUNet"]
 	path = nnUNet
 	url = https://github.com/MIC-DKFZ/nnUNet
+[submodule "scripts/surface-distance"]
+	path = scripts/surface-distance
+	url = https://github.com/google-deepmind/surface-distance.git

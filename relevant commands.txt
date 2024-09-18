@@ -1,0 +1,7 @@
+Relevant Commands
+
+# Activate nnunetv2 environment
+source nnunetv2/bin/activate
+
+# Update ~/.bashrc
+source ~/.bashrc
