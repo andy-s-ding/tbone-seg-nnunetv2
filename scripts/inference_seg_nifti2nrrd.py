@@ -7,11 +7,6 @@ import sys
 import os
 import glob
 
-input_filename = '/Users/andyding/Downloads/Segmentation RT 153.nii.gz'
-output_filename = '/Users/andyding/Downloads/Segmentation RT 153 Test.seg.nrrd'
-mapping_filename = '/home/andyding/tbone-seg-nnunetv2/00_nnUNetv2_baseline_retrain_total_mapping.csv'
-colortable_filename = '/home/andyding/tbone-seg-nnunetv2/scripts/tbone_colortable.csv'
-
 def read_colortable(colortable_filename):
     with open(colortable_filename, mode='r') as infile:
         reader = csv.reader(infile)
@@ -45,7 +40,7 @@ def main(argv):
     datasets = [os.path.basename(f).split('.nii.gz')[0] for f in glob.glob(os.path.join(input_folder, 'jhu***.nii.gz'))]
     mapping = read_mapping(mapping_filename)
     colortable = read_colortable(colortable_filename)
-    breakpoint()
+
     for dataset in datasets:
         print(f"Converting {dataset} NIFTI to {mapping[dataset]} NRRD")
         input_filename = os.path.join(input_folder, dataset + '.nii.gz')
@@ -54,3 +49,5 @@ def main(argv):
 
 if __name__ == '__main__':
     main(sys.argv[1:])
+
+# python3 inference_seg_nifti2nrrd.py /home/andyding/tbone-seg-nnunetv2/00_nnUNetv2_baseline_retrain/nnUNet_trained_models/Dataset101_TemporalBone/nnUNetTrainer_300epochs__nnUNetPlans__3d_fullres/inference_results/reinfer /home/andyding/tbone-seg-nnunetv2/00_nnUNetv2_baseline_retrain/nnUNet_trained_models/Dataset101_TemporalBone/nnUNetTrainer_300epochs__nnUNetPlans__3d_fullres/inference_results/renamed /home/andyding/tbone-seg-nnunetv2/00_nnUNetv2_baseline_retrain_total_mapping.csv /home/andyding/tbone-seg-nnunetv2/scripts/tbone_colortable.csv

@@ -60,8 +60,8 @@ def resample_volume(ctvol_path, out_spacing, out_path, verbose = True):
 
   
 def main():
-    ctvol_path = Path('/home/andyding/tbone-seg-nnunetv2/00_nnUNetv2_baseline_retrain/nnUNet_raw/Dataset101_TemporalBone/test_cadaver/jhu_059_0000.nii.gz')
-    out_path = Path('/home/andyding/tbone-seg-nnunetv2/00_nnUNetv2_baseline_retrain/nnUNet_raw/Dataset101_TemporalBone/test_cadaver/jhu_059_0000_resampled.nii.gz')
+    ctvol_path = Path('/home/andyding/tbone-seg-nnunetv2/00_nnUNetv2_baseline_retrain/nnUNet_raw/Dataset101_TemporalBone/test_cadaver_tbone_1/jhu_060_0000_cropped_unresampled.nii.gz')
+    out_path = Path('/home/andyding/tbone-seg-nnunetv2/00_nnUNetv2_baseline_retrain/nnUNet_raw/Dataset101_TemporalBone/test_cadaver_tbone_1/jhu_060_0000.nii.gz')
     desired_spacing = [0.09797599911689758, 0.09796378761529922, 0.09797599911689758]
     resample_volume(ctvol_path, desired_spacing, out_path, verbose = True)
 
