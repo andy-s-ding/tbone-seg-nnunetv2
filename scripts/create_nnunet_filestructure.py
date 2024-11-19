@@ -15,6 +15,7 @@ import pandas as pd
 from tqdm import tqdm
 from typing import Tuple
 from batchgenerators.utilities.file_and_folder_operations import *
+from nifti_resampler import resample_volume_from_reference
 
 
 # Establish labels
@@ -25,17 +26,18 @@ label_key = {
     "Incus": 3,
     "Stapes": 4,
     "Bony_Labyrinth": 5,
-    "Vestibular_Nerve": 6,
+    "IAC": 6,
     "Superior_Vestibular_Nerve": 7,
     "Inferior_Vestibular_Nerve": 8,
     "Cochlear_Nerve": 9,
     "Facial_Nerve": 10,
     "Chorda_Tympani": 11,
     "ICA": 12,
-    "Sinus_and_Dura": 13,
-    "Vestibular_Aqueduct": 14,
-    "Mandible": 15,
-    "EAC": 16
+    "Sigmoid_Sinus": 13,
+    "Dura": 14,
+    "Vestibular_Aqueduct": 15,
+    "Mandible": 16,
+    "EAC": 17
 }
 
 def rename_file(idx, path, file_type):
@@ -227,28 +229,34 @@ def main(args):
         for i, file in tqdm(enumerate(train_files)):
             orig_img = return_image(file, input_dir)
             new_img = rename_file(i, train_dir, 'image')
-            # mapping_df = mapping_df.append(pd.DataFrame({column_names[0]: [orig_img], column_names[1]: [new_img]}))
             mapping_df = pd.concat([mapping_df, pd.DataFrame.from_records([{column_names[0]: [orig_img], column_names[1]: [new_img]}])])
 
-            command = f"cp {orig_img} {new_img}"
+            command = f"cp {orig_img} {new_img}" # Copy image volume
             # print(command)
             os.system(command)
-            command = f"cp {return_label(file, dirpath=input_dir)} {rename_file(i, train_label_dir, 'label')}"
+
+            orig_label = return_label(file, dirpath=input_dir)
+            new_label = rename_file(i, train_label_dir, 'label')
+            resample_volume_from_reference(orig_label, orig_img, new_label, labelmap=True, verbose=True) # Resample label volume
+            # command = f"cp {orig_label} {new_label}" # Copy label volume (preprocessing may throw error for disrepancies volume:label spacing)
             # print(command)
-            os.system(command)
+            # os.system(command)
         print("Copying Test Files Over...")
         for j, file in tqdm(enumerate(test_files, i+1)):
             orig_img = return_image(file, input_dir)
             new_img = rename_file(j, test_dir, 'image')
-            # mapping_df = mapping_df.append(pd.DataFrame({column_names[0]: [orig_img], column_names[1]: [new_img]}))
             mapping_df = pd.concat([mapping_df, pd.DataFrame.from_records([{column_names[0]: [orig_img], column_names[1]: [new_img]}])])
 
             command = f"cp {orig_img} {new_img}"
             # print(command)
             os.system(command)
-            command = f"cp {return_label(file, dirpath=input_dir)} {rename_file(j, test_label_dir, 'label')}"
+
+            orig_label = return_label(file, dirpath=input_dir)
+            new_label = rename_file(j, test_label_dir, 'label')
+            resample_volume_from_reference(orig_label, orig_img, new_label, labelmap=True, verbose=True) # Resample label volume
+            # command = f"cp {orig_label} {new_label}" # Copy label volume (preprocessing may throw error for disrepancies volume:label spacing)
             # print(command)
-            os.system(command)
+            # os.system(command)
                 
         # Make dataset.json file
         mapping_df.to_csv(os.path.join('.', csv_name))

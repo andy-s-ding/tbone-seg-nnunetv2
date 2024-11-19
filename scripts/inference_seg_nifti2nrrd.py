@@ -26,6 +26,7 @@ def segnifti_to_nrrd(input_filename, output_filename, colortable):
     number_of_segments = len(segmentation_info['segments'])
     print(f"Number of segments: {number_of_segments}")
     segments = segmentation_info['segments']
+    breakpoint()
     for i, segment in enumerate(segments):
         segment['name'] = colortable[i][0]
         segment['color'] = colortable[i][1]
