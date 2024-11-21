@@ -6,6 +6,27 @@ import argparse
 import sys
 import os
 import glob
+from collections import OrderedDict
+
+SEG_NAMES = {
+    1: "Bone",
+    2: "Malleus",
+    3: "Incus",
+    4: "Stapes",
+    5: "Bony Labyrinth",
+    6: "Vestibular Nerve",
+    7: "Superior Vestibular Nerve",
+    8: "Inferior Vestibular Nerve",
+    9: "Cochlear Nerve",
+    10: "Facial Nerve",
+    11: "Chorda Tympani",
+    12: "ICA",
+    13: "Sigmoid Sinus",
+    14: "Dura",
+    15: "Vestibular Aqueduct",
+    16: "Mandible",
+    17: "EAC",
+}
 
 def read_colortable(colortable_filename):
     with open(colortable_filename, mode='r') as infile:
@@ -25,11 +46,12 @@ def segnifti_to_nrrd(input_filename, output_filename, colortable):
     segmentation_info = slicerio.read_segmentation(input_filename)
     number_of_segments = len(segmentation_info['segments'])
     print(f"Number of segments: {number_of_segments}")
-    segments = segmentation_info['segments']
-    breakpoint()
-    for i, segment in enumerate(segments):
-        segment['name'] = colortable[i][0]
-        segment['color'] = colortable[i][1]
+    if number_of_segments != len(colortable):
+        print(f"Some segments are blank")
+    segmentation_info['segments'] = [OrderedDict([('labelValue', i+1),
+                                                  ('name', colortable[i][0]),
+                                                  ('color', colortable[i][1])]) 
+                                                  for i in range(len(colortable))]
 
     slicerio.write_segmentation(output_filename, segmentation_info)
 
@@ -51,4 +73,4 @@ def main(argv):
 if __name__ == '__main__':
     main(sys.argv[1:])
 
-# python3 inference_seg_nifti2nrrd.py /home/andyding/tbone-seg-nnunetv2/00_nnUNetv2_baseline_retrain/nnUNet_trained_models/Dataset101_TemporalBone/nnUNetTrainer_300epochs__nnUNetPlans__3d_fullres/inference_results/reinfer /home/andyding/tbone-seg-nnunetv2/00_nnUNetv2_baseline_retrain/nnUNet_trained_models/Dataset101_TemporalBone/nnUNetTrainer_300epochs__nnUNetPlans__3d_fullres/inference_results/renamed /home/andyding/tbone-seg-nnunetv2/00_nnUNetv2_baseline_retrain_total_mapping.csv /home/andyding/tbone-seg-nnunetv2/scripts/tbone_colortable.csv
+# python3 inference_seg_nifti2nrrd.py /home/andyding/Desktop /home/andyding/Desktop/008 /home/andyding/tbone-seg-nnunetv2/00_nnUNetv2_baseline_retrain_total_mapping.csv /home/andyding/tbone-seg-nnunetv2/scripts/tbone_colortable.csv
