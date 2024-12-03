@@ -17,7 +17,6 @@ import glob
 import fnmatch
 
 SEG_NAMES = {
-    0: "Background",
     1: "Bone",
     2: "Malleus",
     3: "Incus",
@@ -115,7 +114,7 @@ def main():
     # Initialize metric dictionaries
     dice_dict, hausdorff_dict = dict(), dict()
     dice_dict['Target'], hausdorff_dict['Target'] = [], []
-    if not ids: ids = list(range(1,len(SEG_NAMES))) # All structures
+    if not ids: ids = list(SEG_NAMES.keys()) # All structures
     for i in ids: dice_dict[SEG_NAMES[i]], hausdorff_dict[SEG_NAMES[i]] = [], []
         
     if folds:
@@ -147,4 +146,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-# python3 compute_accuracy_metrics_nnunet.py --pred /home/andyding/tbone-seg-nnunetv2/01_nnUNetv2_tbone/nnUNet_trained_models/Dataset101_TemporalBone/nnUNetTrainer_300epochs__nnUNetPlans__3d_fullres/ --folds 0 1 2 3 4 --gt /home/andyding/tbone-seg-nnunetv2/01_nnUNetv2_tbone/nnUNet_raw/Dataset101_TemporalBone/labelsTr/
+# python3 compute_accuracy_metrics_nnunet.py --pred /home/andyding/tbone-seg-nnunetv2/01_nnUNetv2_tbone/nnUNet_trained_models/Dataset101_TemporalBone/nnUNetTrainerDiceFocalLoss_300epochs__nnUNetPlans__3d_fullres/crossval_results_folds_0_1_2_3_4/postprocessed/ --gt /home/andyding/tbone-seg-nnunetv2/01_nnUNetv2_tbone/nnUNet_preprocessed/Dataset101_TemporalBone/gt_segmentations/
