@@ -22,7 +22,7 @@ SEG_NAMES = {
     3: "Incus",
     4: "Stapes",
     5: "Bony Labyrinth",
-    6: "Vestibular Nerve",
+    6: "IAC",
     7: "Superior Vestibular Nerve",
     8: "Inferior Vestibular Nerve",
     9: "Cochlear Nerve",
