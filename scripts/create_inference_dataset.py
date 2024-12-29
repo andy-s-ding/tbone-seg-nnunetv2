@@ -1,9 +1,5 @@
 """
-create_datasplit.py
-
-Creates datasplit based on subjects *NOT* files
-arg1: Segmentation folder
-arg2 (optional): .pkl output name
+create_inference_dataset.py
 """
 
 import os
