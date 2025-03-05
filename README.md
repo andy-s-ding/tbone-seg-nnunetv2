@@ -8,28 +8,23 @@ Instructions for Temporal Bone Dataset Use:
 git clone https://github.com/andy-s-ding/tbone-seg-nnunetv2
 ```
 
-## Step 1: Create datasplit for training/testing. Validation will automatically be chosen
-Navigate to the `scripts` folder:
-```
-cd <path to github>/tbone-seg-nnunet/scripts/
-```
+## Step 0.5: Rename files to format required for nnUNet
+In general, images are named as `<prefix>_<id_num>_<modality_num>.nii.gz` where `<prefix>` can be anything of your choice, `<id_num>` typically starts at `000`, and `<modality_num>` refers to different imaging modalities (CT can be `0000`, MRI T1 can be `0001`, etc.). Labels are named similarly as `<prefix>_<id_num>.nii.gz`.
 
+It is important to know that **nnUNet requires all data to be named in this convention for training and inference**. In our case, our images are named as `jhu_<id_num>_0000.nii.gz` and our labels are named as `jhu_<id_num>.nii.gz`. If you would like to use our pretrained model found in `tbone_nnUNet_Vanilla.zip`, then you must follow this naming convention.
+
+## Step 1: Create datasplit for training/testing. Validation will automatically be chosen
 The datasplit file will be a `.pkl` file that will be referenced when creating the final file structure for nnUNet training.
 
-For the general (default) dataset without deformation field SSM generation, this is done by:
+For the general (default) dataset generation, this is done by running the following command in the `scripts` folder:
 ```
 python create_datasplit.py
 ```
-For the deformation field SSM-generated dataset, this is done by:
-```
-python create_generated_datasplit.py
-```
-Note that in order to create the SSM-generated datasplit, the general `datasplit.pkl` file needs to exist first. This is because the generated datasplit uses the same test set as the general split.
 
 ## Step 2: Create file structure required for nnUNet
-Create a base directory `tbone-seg-nnunet/<BASE_DIR>` that will serve as the root directory for the nnUNet training file structure.
+Create a base directory `tbone-seg-nnunetv2/<BASE_DIR>` that will serve as the root directory for the nnUNet training file structure.
 
-In the `scripts/` folder, run `create_nnunet_filestructure.py` to copy training and test data over based on the datasplit `.pkl` generated in Step 3.
+In the `scripts` folder, run `create_nnunet_filestructure.py` to copy training and test data over based on the datasplit `.pkl` generated in Step 3.
 
 For the general temporal bone dataset:
 ```
@@ -62,7 +57,7 @@ Potential Error: You may need to edit the dataset.json file so that the labels a
 ### Step 4a: Setting up Training with Distace Maps
 Extra steps are needeed to set up training using distance map-weighted loss functions. First, the distance maps must be pre-computed from the preprocessed data. In the `scripts` folder:
 ```
-python3 compute_distance_maps.py --input_dir <BASE_DIR>/nnUNet_preprocessed/Dataset<datset_num>_TemporalBone/nnUNetPlans_3d_fullres/ --multi_class
+python compute_distance_maps.py --input_dir <BASE_DIR>/nnUNet_preprocessed/Dataset<datset_num>_TemporalBone/nnUNetPlans_3d_fullres/ --multi_class
 ```
 This will save distance maps as `jhu_<id_num>_dist.npy` files for training, similar to how labels are saved as `jhu_<id_num>_seg.npy` files. Using the `--nifti` option will save `.nii.gz` files for you to view them in Slicer or another medical image analysis software.
 
