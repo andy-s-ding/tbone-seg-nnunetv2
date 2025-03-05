@@ -66,6 +66,8 @@ python3 compute_distance_maps.py --input_dir <BASE_DIR>/nnUNet_preprocessed/Data
 ```
 This will save distance maps as `jhu_<id_num>_dist.npy` files for training, similar to how labels are saved as `jhu_<id_num>_seg.npy` files. Using the `--nifti` option will save `.nii.gz` files for you to view them in Slicer or another medical image analysis software.
 
+Running this script requires the [Multi-Label Anisotropic 3D Euclidean Distance Transform (MLAEDT-3D)](https://github.com/seung-lab/euclidean-distance-transform-3d) package, which computes multi-class distance transforms in O(N) time rather than O(N<sup>3</sup>) time.
+
 ## Step 5: Begin Training
 For vanilla training on a 3D nnUNet, run:
 ```
