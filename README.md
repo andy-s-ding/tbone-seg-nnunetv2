@@ -157,10 +157,6 @@ the postprocessing file. If not you can just look for it in your results folder 
 a `-dataset_json` file that should be used (for single configuration predictions these are automatically copied 
 from the respective training). You can pick these files from any of the ensemble members.
 
-
-## How to run inference with pretrained models
-See [here](run_inference_with_pretrained_models.md)
-
 ## How to Deploy and Run Inference with YOUR Pretrained Models
 To facilitate the use of pretrained models on a different computer for inference purposes, follow these streamlined steps:
 1. Exporting the Model: Utilize the `nnUNetv2_export_model_to_zip` function to package your trained model into a .zip file. This file will contain all necessary model files.
