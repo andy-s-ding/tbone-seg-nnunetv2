@@ -63,14 +63,20 @@ def main(argv):
     datasets = [os.path.basename(f).split('.nii.gz')[0] for f in glob.glob(os.path.join(input_folder, 'jhu***.nii.gz'))]
     mapping = read_mapping(mapping_filename)
     colortable = read_colortable(colortable_filename)
-
+    
+    print(datasets)
     for dataset in datasets:
-        print(f"Converting {dataset} NIFTI to {mapping[dataset]} NRRD")
+        print(f"Converting {dataset} NIFTI to NRRD")
         input_filename = os.path.join(input_folder, dataset + '.nii.gz')
-        output_filename = os.path.join(output_folder, 'Segmentation_' + mapping[dataset] + '.seg.nrrd')
+        try:
+            print(f"Renaming {dataset} to {mapping[dataset]}")
+            output_filename = os.path.join(output_folder, 'Segmentation_' + mapping[dataset] + '.seg.nrrd')
+        except:
+            print(f"Mapping of {dataset} not found. File name will be {dataset}")
+            output_filename = os.path.join(output_folder, 'Segmentation_' + dataset + '.seg.nrrd')
         segnifti_to_nrrd(input_filename, output_filename, colortable)    
 
 if __name__ == '__main__':
     main(sys.argv[1:])
 
-# python3 inference_seg_nifti2nrrd.py /home/andyding/Desktop /home/andyding/Desktop/008 /home/andyding/tbone-seg-nnunetv2/00_nnUNetv2_baseline_retrain_total_mapping.csv /home/andyding/tbone-seg-nnunetv2/scripts/tbone_colortable.csv
+# python3 inference_seg_nifti2nrrd.py /home/andyding/Desktop /home/andyding/Desktop/008 /home/andyding/tbone-seg-nnunetv2/00_nnUNetv2_baseline_retrain_total_mapping.csv scripts/tbone_colortable_separated_sinus_dura.csv

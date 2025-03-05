@@ -45,7 +45,7 @@ def parse_command_line(args):
                         action="store_true",
                         help="True if overwriting input volume"
                         )
-    parser.add_argument('v', '--verbose',
+    parser.add_argument('-v', '--verbose',
                         action="store_true",
                         help="True if verbose"
                         )
@@ -156,7 +156,7 @@ def resample_volume_from_reference(ctvol_path, ctvol_ref_path, out_path, labelma
         if verbose: print('Total runtime for resampling: ', runtime)
 
   
-def main(argv):
+def main():
     args = parse_command_line(sys.argv)
     ctvol_path = args['input']
     ctvol_ref_path = args['reference']
