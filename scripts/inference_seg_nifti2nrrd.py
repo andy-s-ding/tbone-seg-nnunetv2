@@ -28,6 +28,37 @@ SEG_NAMES = {
     17: "EAC",
 }
 
+def parse_command_line(args):
+    print('parsing command line')
+    parser = argparse.ArgumentParser(description='Registration pipeline for image-image registration')
+    parser.add_argument('-i', '--input',
+                        action="store",
+                        type=str,
+                        help="Specify an input folder",
+                        required=True
+                        )
+    parser.add_argument('-o', '--output',
+                        action="store",
+                        type=str,
+                        help="Specify an output folder",
+                        required=True
+                        )
+    parser.add_argument('-m', '--map',
+                        action="store",
+                        type=str,
+                        help="Specify a mapping .csv",
+                        default=None
+                        )
+    parser.add_argument('-c', '--color',
+                        action="store",
+                        type=str,
+                        help="Specify a colortable .csv",
+                        required=True
+                        )
+    
+    args = vars(parser.parse_args())
+    return args
+
 def read_colortable(colortable_filename):
     with open(colortable_filename, mode='r') as infile:
         reader = csv.reader(infile)
@@ -55,13 +86,15 @@ def segnifti_to_nrrd(input_filename, output_filename, colortable):
 
     slicerio.write_segmentation(output_filename, segmentation_info)
 
-def main(argv):
-    input_folder = argv[0]
-    output_folder = argv[1]
-    mapping_filename = argv[2]
-    colortable_filename = argv[3]
+def main():
+    args = parse_command_line(sys.argv)
+    input_folder = args['input']
+    output_folder = args['output']
+    os.makedirs(output_folder, exist_ok=True)
+    mapping_filename = args['map']
+    colortable_filename = args['color']
     datasets = [os.path.basename(f).split('.nii.gz')[0] for f in glob.glob(os.path.join(input_folder, 'jhu***.nii.gz'))]
-    mapping = read_mapping(mapping_filename)
+    mapping = read_mapping(mapping_filename) if mapping_filename is not None else None
     colortable = read_colortable(colortable_filename)
     
     print(datasets)
@@ -76,7 +109,7 @@ def main(argv):
             output_filename = os.path.join(output_folder, 'Segmentation_' + dataset + '.seg.nrrd')
         segnifti_to_nrrd(input_filename, output_filename, colortable)    
 
-if __name__ == '__main__':
-    main(sys.argv[1:])
+if __name__ == "__main__":
+    main()
 
 # python3 inference_seg_nifti2nrrd.py /home/andyding/Desktop /home/andyding/Desktop/008 /home/andyding/tbone-seg-nnunetv2/00_nnUNetv2_baseline_retrain_total_mapping.csv scripts/tbone_colortable_separated_sinus_dura.csv
