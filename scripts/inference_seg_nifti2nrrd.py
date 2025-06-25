@@ -34,25 +34,25 @@ def parse_command_line(args):
     parser.add_argument('-i', '--input',
                         action="store",
                         type=str,
-                        help="Specify an input folder",
+                        help="Specify an input folder with NIFTI files",
                         required=True
                         )
     parser.add_argument('-o', '--output',
                         action="store",
                         type=str,
-                        help="Specify an output folder",
+                        help="Specify an output folder to save the NRRD files",
                         required=True
                         )
     parser.add_argument('-m', '--map',
                         action="store",
                         type=str,
-                        help="Specify a mapping .csv",
+                        help="Specify a mapping .csv for NIFTI file names to NRRD file names. If no mapping file is specified, then the NRRDs will use the NIFTI file names",
                         default=None
                         )
     parser.add_argument('-c', '--color',
                         action="store",
                         type=str,
-                        help="Specify a colortable .csv",
+                        help="Specify a colortable .csv for segmentation colors",
                         required=True
                         )
     
@@ -112,4 +112,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-# python3 inference_seg_nifti2nrrd.py /home/andyding/Desktop /home/andyding/Desktop/008 /home/andyding/tbone-seg-nnunetv2/00_nnUNetv2_baseline_retrain_total_mapping.csv scripts/tbone_colortable_separated_sinus_dura.csv
+# python3 inference_seg_nifti2nrrd.py -i /home/andyding/Downloads/CT_photon_nnUNet/results/postprocessed/ -o /home/andyding/Downloads/CT_photon_nnUNet/results/postprocessed/nrrd/ -m /home/andyding/tbone-seg-nnunetv2/00_nnUNetv2_baseline_retrain_total_mapping.csv -c scripts/tbone_colortable_separated_sinus_dura.csv
