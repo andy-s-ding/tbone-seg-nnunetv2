@@ -79,6 +79,10 @@ def calculate_accuracy_metrics(pred_dir, gt_dir, target_list, ids,
         pred_seg_path = os.path.join(pred_dir, "{}.nii.gz".format(target))
         gt_seg_path = os.path.join(gt_dir, "{}.nii.gz".format(target))
 
+        if not os.path.exists(pred_seg_path):
+            print('ERROR: Predicted segmentation file does not exist: {}'.format(pred_seg_path))
+            continue
+
         pred_seg = np.array(nib.load(pred_seg_path).dataobj)
         gt_seg = np.array(nib.load(gt_seg_path).dataobj)
         spacing = nib.load(gt_seg_path).header.get_zooms()
